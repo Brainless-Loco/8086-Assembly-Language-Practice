@@ -1,0 +1,99 @@
+.model small
+.stack 100h
+.data
+
+
+star dw 42
+space dw 32
+row dw 9
+trow dw 9
+col dw 5
+spc dw 0
+str dw 0
+
+
+
+.code
+
+
+main proc
+    mov ax,@data
+    mov ds,ax
+    
+    
+    mov ah,1
+    mov cx,row
+    
+    
+    rowlevel: 
+    mov trow,cx    
+    push cx
+    
+    cmp cx,5
+    jg fhalf
+    je ehalf
+    jl lhalf
+    
+    fhalf:
+    mov cx,trow
+    sub cx,col
+    mov spc,cx
+    mov str,1
+    
+    jmp spaceLoop
+    
+    ehalf:
+    mov str,9
+    jmp printStar
+    
+    lhalf:
+    mov str,1
+    mov bx,col
+    sub bx,trow
+    mov spc,bx
+    
+    
+    spaceLoop:
+    cmp spc,0
+    je printStar
+    mov ah,2
+    mov dx,space
+    int 21h
+    dec spc
+    jmp spaceLoop
+    
+    
+    
+    
+    
+    printStar:
+    cmp str,0
+    je endPrint
+    mov ah,2
+    mov dx,star
+    int 21h
+    dec str
+    jmp printStar
+     
+     
+     
+    endPrint: 
+    
+    mov ah,2
+    mov dl,10
+    int 21h
+    mov dl,13
+    int 21h
+    
+    
+    
+    pop cx
+    
+    
+    loop rowlevel
+    
+
+main endp 
+
+
+

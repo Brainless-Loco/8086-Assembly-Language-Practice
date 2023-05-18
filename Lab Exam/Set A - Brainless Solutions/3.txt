@@ -1,0 +1,37 @@
+.model small
+.stack 100h
+.data
+
+d dw 3                   
+
+.code
+
+main proc
+    mov ax,@data
+    mov ds,ax
+    
+    mov cx,3
+    mov bx,1
+    
+    mov ah,2
+    
+    level:    
+    mov dx,bx
+    add dx,48
+    int 21h
+    add bx,d
+    mov dl,10
+    int 21h
+    mov dl,13
+    int 21h
+    
+    loop level
+    
+    
+    
+    
+    main endp
+
+end main
+    
+    

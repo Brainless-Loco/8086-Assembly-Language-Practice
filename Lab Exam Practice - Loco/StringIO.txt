@@ -1,0 +1,37 @@
+.model small
+.stack 100h
+.data
+string db 50 dup('$')
+.code
+main proc
+    mov ax,@data
+    mov ds,ax
+    
+    mov si,offset string
+    
+    mov ah,1
+    
+    levelInput:
+    int 21h
+    cmp al,48
+    jl printLevel
+    mov [si],al
+    inc si
+    jmp levelInput
+    
+    
+    printLevel:
+    mov ah,2
+    mov dl,10
+    int 21h
+    mov dl,13
+    int 21h
+    lea dx, string 
+    mov ah,9
+    int 21h
+    
+
+main endp 
+
+
+

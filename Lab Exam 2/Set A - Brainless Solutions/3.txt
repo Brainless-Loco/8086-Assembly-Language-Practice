@@ -1,0 +1,95 @@
+.model small
+.stack 100h
+.data
+
+
+str dw 100 dup('$')
+UniqueString dw 100 dup('-')
+unq dw 0 
+flag dw 0
+
+
+
+.code
+
+
+main proc
+    mov ax,@data
+    mov ds,ax
+    
+    mov ah,1
+    mov si,offset str
+    
+    levelInput:
+    int 21h
+    cmp al,32
+    jle AnsPrintLevel
+    mov [si],al
+    
+    push si
+    
+    mov si,offset UniqueString
+    
+    mov bx,unq
+    
+    checkUnique:
+    cmp bx,0
+    je update
+    cmp [si],al
+    je  noUpdate
+    inc si
+    dec bx
+    jmp checkUnique
+    
+    update:
+    mov si, offset UniqueString
+    add si,unq
+    mov [si],al
+    inc unq
+    
+    noUpdate:
+    
+    
+    pop si
+    inc si
+    jmp levelInput
+    
+    
+    
+    
+    AnsPrintLevel:
+    
+    mov ah,2
+    mov dl,10
+    int 21h
+    mov dl,13
+    int 21h
+    
+    mov cx,0 
+    mov bx,10
+    mov ax,[unq]
+    mov dx,0
+    
+    pushLabel:
+    cmp ax,0
+    je printLabel
+    
+    div bx
+    push dx
+    inc cx 
+    mov dx,0
+    jmp pushLabel
+    
+    
+    printLabel:
+    mov ah,2
+    pop dx
+    add dx,48
+    int 21h
+    loop printLabel
+    
+
+main endp 
+
+
+

@@ -1,0 +1,58 @@
+.model small
+.stack 100h
+.data                   
+
+input db 'Enter the Input: $'
+num db ?
+numsq db ?
+
+.code
+
+main proc
+    mov ax,@data
+    mov ds,ax
+    
+    mov ah,9
+    lea dx,input
+    int 21h
+    
+    mov ah,1
+    int 21h
+    
+    mov numsq,al
+    mov num,al
+    
+    sub numsq,48
+    sub num,48
+    
+    mul numsq
+    
+    mov cx,2
+    
+    mul cx
+    
+    add ax,2
+    
+    mov bx,ax
+    
+    mov al,num
+    
+    mov cx,3
+    mul cx
+    
+    add ax,bx
+    sub ax,48
+    
+    mov dx,ax
+    mov ah,2
+    int 21h
+    
+    
+    
+    
+    
+    main endp
+
+end main
+    
+    

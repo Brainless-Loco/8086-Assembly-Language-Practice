@@ -1,0 +1,70 @@
+.model small
+.stack 100h
+.data
+
+str db 50 dup('$')
+
+yes db 'Yes!! $' 
+no db  'No !! $'
+
+.code
+main proc
+    mov ax,@data
+    mov ds,ax
+    
+    mov cx,0
+    mov si,offset str
+    
+
+    
+    levelInput:
+    mov ah,1
+    int 21h
+    cmp al,48
+    jl checkpal
+    mov ah,0
+    mov [si],ax
+    inc si
+    push ax
+    inc cx
+    jmp levelInput
+    
+    
+    checkpal: 
+    
+    mov ah,2
+    mov dl,10
+    int 21h
+    mov dl,13
+    int 21h
+    
+    mov si, offset str
+    
+    checkstart:
+    pop bx
+    cmp [si],bl
+    jne notpal
+    inc si
+    loop checkstart
+     
+    
+    
+   
+    pal:
+    mov ah,9
+    lea dx,yes
+    int 21h
+    jmp endpp
+       
+     
+    notpal:
+    mov ah,9
+    lea dx, no
+    int 21h
+    
+    endpp:
+
+main endp 
+
+
+

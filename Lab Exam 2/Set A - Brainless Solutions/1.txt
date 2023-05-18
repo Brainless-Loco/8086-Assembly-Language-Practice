@@ -1,0 +1,146 @@
+.model small
+.stack 100h
+.data
+
+
+
+up dw 0
+len dw 0
+dig dw 0
+spcl dw 0
+conOk dw 0
+string db 50 dup('$')
+
+PS dw 'Password Strength: $' 
+AverageP dw 'Average.$'
+StrongP dw 'Strong.$'
+WeakP dw 'Weak.$'
+
+
+
+
+.code
+
+
+main proc
+    mov ax,@data
+    mov ds,ax
+    
+    mov si,offset string
+    
+    mov ah,1
+    
+    levelInput:
+    int 21h
+    cmp al,32
+    jl checkLevel
+    mov [si],al
+    
+    cmp al,65
+    jl isDig
+    
+    cmp al,90
+    jg isDig
+    
+    inc up
+    
+    isDig:
+    cmp al,48
+    jl  isSP
+    
+    cmp al,57
+    jg isSp
+    
+    inc dig
+    
+    
+    isSP:
+    
+    cmp al, 35
+    je  incOfsp
+    cmp al,36
+    je incOfsp
+    cmp al,42
+    je incOfsp
+    
+        
+    jmp otherTasks
+    incOfsp:
+    inc spcl
+    
+    
+    otherTasks:
+    
+    inc si
+    inc len
+    jmp levelInput
+    
+    
+    
+    checkLevel:
+    
+    
+    mov ah,2
+    mov dx,10
+    int 21h
+    mov dx,13
+    int 21h
+    
+    
+    cmp len,6
+    jl checkUp:
+    inc conOk
+    
+    checkUp:
+    cmp up,0
+    je  checkDig
+    inc conOk
+    
+    
+    checkDig:
+    cmp dig,0
+    je  checkspec
+    inc conOk
+    
+    
+    checkspec:
+    cmp spcl,0
+    je printlevel
+    inc conOk
+    
+    
+    printlevel:
+    mov ah,9
+    lea dx,PS
+    int 21h
+    
+    cmp conOk,3
+    je avg
+    jl weak
+    jg strong
+    
+    avg:
+    lea dx,AverageP
+    jmp finalPrint
+    
+    weak:
+    lea dx,WeakP
+    jmp finalPrint
+    
+    strong:
+    lea dx,StrongP
+    jmp finalPrint
+    
+    
+    
+    finalPrint:
+    int 21h
+    hlt
+    
+    
+    
+
+main endp 
+
+
+

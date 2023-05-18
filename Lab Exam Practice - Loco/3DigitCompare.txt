@@ -1,0 +1,67 @@
+.model small
+.stack 100h
+.data
+x dw ?
+y dw ?
+z dw ?
+ans dw ?
+star dw 42
+space dw 32
+.code
+
+main proc
+    mov dx,@data
+    mov ds,dx
+    
+    
+    mov ah,1
+    int 21h
+    mov ah,0
+    mov bx,ax
+    
+    mov ah,1
+    int 21h
+    mov ah,0
+    mov cx,ax
+    
+    mov ah,1
+    int 21h
+    mov ah,0
+    mov dx,ax
+    
+    
+    cmp bx,cx
+    jl yGEx
+    
+    
+    xGEy:
+    mov ans,bx
+    jmp endOfxy
+    
+    
+    yGEx:
+    mov ans,cx
+    jmp endOfxy
+    
+    
+    endOfxy:
+    
+    cmp ans,dx
+    jge printAns
+    
+    
+    zGEa:
+    mov ans,dx
+    
+    printAns:
+    mov dx,ans
+    mov ah,2
+    int 21h
+    
+    
+    
+    main endp
+
+end main
+    
+    

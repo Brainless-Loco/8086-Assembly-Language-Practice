@@ -1,0 +1,80 @@
+.model small
+.stack 100h
+.data
+
+str dw 50 dup('$')
+subcnt dw 0
+gotstr dw 0
+
+.code
+
+nl proc
+    mov ah,2
+    mov dx,10
+    int 21h
+    mov dx,13
+    int 21h
+    ret
+
+main proc
+    mov ax,@data
+    mov ds,ax
+    
+    mov si, offset str
+    
+    mov bx,0
+    
+    input:
+ 
+    mov ah,1
+    int 21h
+    mov [si],al
+    cmp al,32
+    jl getOutOfInput
+    inc si
+    jmp input
+    
+    getOutOfInput:
+    call nl
+    
+    mov si,offset str
+    
+    mov gotStr,0
+    
+    
+    sublevel:
+    mov dx,[si]
+    cmp [si],32
+    jle getOutOfSub
+    inc gotStr
+    int 21h
+    inc si
+    jmp sublevel
+    
+    getOutOfSub:
+    cmp gotStr,0
+    je noInc
+    
+    inc subcnt
+    
+    noInc:
+    
+    call nl
+    mov gotStr,0
+    cmp [si],32
+    jl EndofPrc
+    inc si
+    jmp sublevel
+    
+    EndofPrc:
+    mov ah,2
+    call nl
+    mov dx,subcnt
+    add dx,48
+    int 21h
+    
+    
+    
+    
+    main endp
+end main

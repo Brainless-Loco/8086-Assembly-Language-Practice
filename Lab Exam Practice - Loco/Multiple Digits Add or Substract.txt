@@ -1,0 +1,88 @@
+.model small
+.stack 100h
+.data
+n dw 0
+m dw 0
+sum dw 0
+cnt dw 0
+ten dw 10
+.code
+
+main proc
+    mov dx,@data
+    mov ds,dx
+    
+    startLabel:
+    mov ah,0
+    mov ax,m
+    mov n,ax
+    mov m,0
+    
+    inputLabel:
+    mov ah,1
+    int 21h
+    cmp al,48
+    jl endOfInput
+    
+    sub al,48
+    mov ah,0
+    mov cx,0
+    mov cx,ax
+    
+    mov ah,0
+    mov ax,m
+    mul ten
+    add ax,cx
+    mov m,ax
+    
+    jmp inputLabel
+    
+    endOfInput:
+    
+    mov ah,2
+    mov dl,10
+    int 21h
+    mov dl,13
+    int 21h
+    
+    add cnt,1
+    cmp cnt,2
+    jl startLabel
+    
+    mov dh,0
+    
+    mov dx,n
+    add dx,m
+    mov sum,dx
+    
+    outputLabel:
+    mov bx,10
+    mov cx,0
+    mov dx,0
+    
+    mov ax,[sum]
+    
+    pushLabel:
+    cmp ax,0
+    je printLabel
+    
+    div bx
+    push dx
+    inc cx 
+    mov dx,0
+    jmp pushLabel
+    
+    
+    printLabel:
+    mov ah,2
+    pop dx
+    add dx,48
+    int 21h
+    loop printLabel
+    
+    
+    main endp
+
+end main
+    
+    

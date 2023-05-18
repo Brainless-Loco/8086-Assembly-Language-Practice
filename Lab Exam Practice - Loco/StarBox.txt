@@ -1,0 +1,109 @@
+.model small
+.stack 100h
+.data
+row dw ?
+col dw ?
+trow dw ?
+tcol dw ?
+star dw 42
+space dw 32
+.code
+
+main proc
+    mov dx,@data
+    mov ds,dx
+    
+    mov ah,1
+    int 21h
+    mov ah,0
+    sub ax,48
+    mov row,ax
+    
+    
+    mov ah,2 
+    mov dl,10
+    int 21h
+    mov dl,13
+    int 21h 
+    
+    
+    mov ah,1
+    int 21h
+    mov ah,0
+    sub ax,48
+    mov col,ax
+    
+    
+    mov ah,2
+    mov dl,10
+    int 21h
+    mov dl,13
+    int 21h
+    mov dl,10
+    int 21h
+    mov dl,13
+    int 21h
+    
+    
+    mov bx,row
+    mov trow,bx
+    
+    levelRow:
+    
+    cmp trow,0
+    je endOfPrint
+    dec trow
+    
+    mov cx,col
+    
+    levelCol:
+   
+    mov ah,2
+    
+    mov bx,trow
+    inc bx
+    cmp bx,row
+    je  printAstar
+    cmp trow,0
+    je  printAstar
+    
+    printAspaceOrStar:
+    mov bx,cx
+    cmp bx,col
+    je  printAstar
+    cmp cx,1
+    je  printAstar
+    
+    
+    printASpace:
+    mov dx,space
+    int 21h
+    jmp printShesh
+    
+    printAstar:
+    mov dx,star  
+    int 21h
+    
+    printShesh:
+    
+    loop levelCol
+     
+    mov ah,2
+    mov dl,10
+    int 21h
+    mov dl,13
+    int 21h
+    
+    jmp levelRow
+
+    
+    
+    endOfPrint:
+    
+    
+    
+    main endp
+
+end main
+    
+    
